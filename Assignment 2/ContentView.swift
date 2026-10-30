@@ -3,6 +3,7 @@
  - assistance in creating the OrderItem struct with Identifiable, Equatable and UUID() which weren't covered in class
  - assistance in figuring out how to add the functionality to be able to swipe to delete
  - assistance in figuring out how to add a dropdown for the pasta selection (DisclosureGroup with a Picker)
+ - assistance in figuring out the closure for resetting once Confirm Order is pressed
  - assistance with styling (colors, icons)
  
  
@@ -101,7 +102,7 @@ struct ContentView: View {
                 }
                 
                 Section {
-                    ConfirmItem(themeColor: themeColor)
+                    ConfirmItem(themeColor: themeColor, orderedItems: $orderedItems)
                 }
             }
             .listStyle(GroupedListStyle())
@@ -254,6 +255,7 @@ struct CostItem: View {
 
 struct ConfirmItem: View {
     var themeColor: Color
+    @Binding var orderedItems: [OrderItem]
     @State private var present: Bool = false
     
     var body: some View {
@@ -271,7 +273,10 @@ struct ConfirmItem: View {
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $present) {
-            ConfirmationView(present: $present, themeColor: themeColor)
+            ConfirmationView(present: $present, themeColor: themeColor) {
+                // Clear the order array when dismissed
+                orderedItems.removeAll()
+            }
         }
     }
 }
@@ -279,6 +284,7 @@ struct ConfirmItem: View {
 struct ConfirmationView: View {
     @Binding var present: Bool
     var themeColor: Color
+    var onDismiss: () -> Void // Closure to handle reset
     
     var body: some View {
         VStack(spacing: 16) {
@@ -291,13 +297,18 @@ struct ConfirmationView: View {
                 .bold()
                 .foregroundStyle(.primary)
             
+            Text("Your food is being prepared.")
+                .font(.subheadline)
+                .foregroundStyle(.secondary)
+            
             Button("Dismiss") {
+                onDismiss() // Triggers the cart reset
                 present = false
             }
             .buttonStyle(.borderedProminent)
             .tint(themeColor)
-        }
         .padding()
+        }
     }
 }
 
