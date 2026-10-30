@@ -15,17 +15,32 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launch" translatesAutoresizingMaskIntoConstraints="NO" id="1JI-nv-VUj">
-                                <rect key="frame" x="0.0" y="238" width="393" height="325"/>
-                            </imageView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="JYp-6I-zAy">
+                                <rect key="frame" x="0.0" y="295.33333333333337" width="393" height="261.33333333333337"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Launch" translatesAutoresizingMaskIntoConstraints="NO" id="1JI-nv-VUj">
+                                        <rect key="frame" x="0.0" y="0.0" width="393" height="261.33333333333331"/>
+                                    </imageView>
+                                    <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="Trattoria Sawi" borderStyle="roundedRect" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Ao7-K8-0Q0">
+                                        <rect key="frame" x="0.0" y="261.33333333333331" width="393" height="0.0"/>
+                                        <fontDescription key="fontDescription" name="Copperplate" family="Copperplate" pointSize="30"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="JYp-6I-zAy" secondAttribute="height" multiplier="320:213" id="Jms-7p-eDG"/>
+                                    <constraint firstItem="1JI-nv-VUj" firstAttribute="centerX" secondItem="JYp-6I-zAy" secondAttribute="centerX" id="obC-Qj-d6I"/>
+                                    <constraint firstItem="1JI-nv-VUj" firstAttribute="centerY" secondItem="JYp-6I-zAy" secondAttribute="centerY" id="vdU-Ew-tfh"/>
+                                </constraints>
+                            </stackView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Bcu-3y-fUS" firstAttribute="bottom" secondItem="1JI-nv-VUj" secondAttribute="bottom" constant="221" id="D9X-Og-gYq"/>
-                            <constraint firstAttribute="trailing" secondItem="1JI-nv-VUj" secondAttribute="trailing" id="Y0E-pk-ib6"/>
-                            <constraint firstItem="1JI-nv-VUj" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="ZdB-YH-fs1"/>
-                            <constraint firstItem="1JI-nv-VUj" firstAttribute="top" secondItem="Bcu-3y-fUS" secondAttribute="top" constant="120" id="d3Y-ji-oVu"/>
+                            <constraint firstItem="JYp-6I-zAy" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="1P8-eQ-EPE"/>
+                            <constraint firstItem="JYp-6I-zAy" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="1lU-Ai-nu9"/>
+                            <constraint firstItem="JYp-6I-zAy" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="gzu-wR-sw8"/>
+                            <constraint firstAttribute="trailing" secondItem="JYp-6I-zAy" secondAttribute="trailing" id="rPi-AO-Ee2"/>
                         </constraints>
                     </view>
                 </viewController>

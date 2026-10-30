@@ -1,10 +1,17 @@
-
-// Gemini used to help find out how to swipe to delete
-// how to add a dropdown for pastas on a selection (DisclosureGroup)
+/*
+ The author would like to acknowledge the use of Gemini, a language model developed by Google, in the preparation of this assignment. Gemini was used in the following ways in this assignment:
+ - assistance in creating the OrderItem struct with Identifiable, Equatable and UUID() which weren't covered in class
+ - assistance in figuring out how to add the functionality to be able to swipe to delete
+ - assistance in figuring out how to add a dropdown for the pasta selection (DisclosureGroup with a Picker)
+ - assistance with styling (colors, icons)
+ 
+ 
+ Launch Screen image is from https://www.vecteezy.com/free-vector/spaghetti-bowl
+ */
+ 
 
 import SwiftUI
 
-// MARK: - Model
 struct OrderItem: Identifiable, Equatable {
     let id = UUID()
     let pastaType: String
@@ -12,14 +19,22 @@ struct OrderItem: Identifiable, Equatable {
     let price: Int
 }
 
-// Custom Wine Color definition for guaranteed contrast
+// Color Schemes
 extension Color {
-    static let wineRed = Color(red: 0.5, green: 0.1, blue: 0.15)
+    // light mode
+    static let baseWineRed = Color(red: 0.5, green: 0.1, blue: 0.15)
+    // dark mode
+    static let italianGreen = Color(red: 0.2, green: 0.5, blue: 0.25)
 }
 
 struct ContentView: View {
+    @Environment(\.colorScheme) var colorScheme
     @State private var orderedItems: [OrderItem] = []
     @State private var tip: Int = 0
+    
+    private var themeColor: Color {
+        colorScheme == .dark ? Color.italianGreen : Color.baseWineRed
+    }
     
     private var subtotal: Int {
         orderedItems.reduce(0) { $0 + $1.price }
@@ -28,12 +43,12 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             List {
-                // MARK: - Welcome Banner
+                // Welcome Banner
                 Section {
                     VStack(alignment: .center, spacing: 4) {
                         Image(systemName: "laurel.leading")
                             .font(.system(size: 32))
-                            .foregroundStyle(Color.wineRed)
+                            .foregroundStyle(themeColor)
                         Text("Welcome to Trattoria Sawi")
                             .font(.headline)
                             .foregroundStyle(.primary)
@@ -46,20 +61,20 @@ struct ContentView: View {
                 }
                 .listRowBackground(Color.clear)
                 
-                // MARK: - Menu Items
+                // Menu Items
                 Group {
-                    ListItem(itemName: "Aglio e Olio", price: 15, orderedItems: $orderedItems)
-                    ListItem(itemName: "Pomodoro", price: 20, orderedItems: $orderedItems)
-                    ListItem(itemName: "Bolognese", price: 25, orderedItems: $orderedItems)
-                    ListItem(itemName: "Cacio e Pepe", price: 18, orderedItems: $orderedItems)
-                    ListItem(itemName: "Puttanesca", price: 20, orderedItems: $orderedItems)
-                    ListItem(itemName: "Carbonara", price: 25, orderedItems: $orderedItems)
-                    ListItem(itemName: "Arrabiata", price: 23, orderedItems: $orderedItems)
-                    ListItem(itemName: "Pasta alle Vongole", price: 35, orderedItems: $orderedItems)
-                    ListItem(itemName: "Pasta al Tonno", price: 28, orderedItems: $orderedItems)
+                    ListItem(itemName: "Aglio e Olio", price: 15, orderedItems: $orderedItems, themeColor: themeColor)
+                    ListItem(itemName: "Pomodoro", price: 20, orderedItems: $orderedItems, themeColor: themeColor)
+                    ListItem(itemName: "Bolognese", price: 25, orderedItems: $orderedItems, themeColor: themeColor)
+                    ListItem(itemName: "Cacio e Pepe", price: 18, orderedItems: $orderedItems, themeColor: themeColor)
+                    ListItem(itemName: "Puttanesca", price: 20, orderedItems: $orderedItems, themeColor: themeColor)
+                    ListItem(itemName: "Carbonara", price: 25, orderedItems: $orderedItems, themeColor: themeColor)
+                    ListItem(itemName: "Arrabiata", price: 23, orderedItems: $orderedItems, themeColor: themeColor)
+                    ListItem(itemName: "Pasta alle Vongole", price: 35, orderedItems: $orderedItems, themeColor: themeColor)
+                    ListItem(itemName: "Pasta al Tonno", price: 28, orderedItems: $orderedItems, themeColor: themeColor)
                 }
                 
-                // MARK: - Current Order Summary
+                // Order Summary
                 if !orderedItems.isEmpty {
                     Section(header: Text("Current Order").bold()) {
                         ForEach(orderedItems) { item in
@@ -77,34 +92,32 @@ struct ContentView: View {
                     }
                 }
                 
-                // MARK: - Tip Section
                 Section {
                     TipItem(tip: $tip)
                 }
                 
-                // MARK: - Cost Summary Section
                 Section {
-                    CostItem(subtotal: subtotal, tip: tip)
+                    CostItem(subtotal: subtotal, tip: tip, themeColor: themeColor)
                 }
                 
-                // MARK: - Confirmation Section
                 Section {
-                    ConfirmItem()
+                    ConfirmItem(themeColor: themeColor)
                 }
             }
             .listStyle(GroupedListStyle())
             .navigationTitle(Text("Trattoria Sawi"))
             .navigationBarTitleDisplayMode(.inline)
-            .tint(Color.wineRed)
+            .tint(themeColor)
         }
     }
 }
 
-
+// Menu Items
 struct ListItem: View {
     var itemName: String
     var price: Int
     @Binding var orderedItems: [OrderItem]
+    var themeColor: Color
     
     let pastaOptions: [String] = [
         "Spaghetti", "Penne", "Rigatoni", "Fettuccine",
@@ -118,7 +131,7 @@ struct ListItem: View {
         DisclosureGroup(isExpanded: $isExpanded) {
             VStack(alignment: .leading, spacing: 12) {
                 
-                // Clean Picker Row without duplicate labels
+                // Picker Row for pasta
                 HStack {
                     Text("Choose Shape:")
                         .font(.subheadline)
@@ -133,7 +146,7 @@ struct ListItem: View {
                         }
                     }
                     .pickerStyle(.menu)
-                    .tint(Color.wineRed)
+                    .tint(themeColor)
                 }
                 .padding(.top, 4)
                 
@@ -152,7 +165,7 @@ struct ListItem: View {
                         Spacer()
                     }
                     .padding(.vertical, 10)
-                    .background(Color.wineRed)
+                    .background(themeColor)
                     .cornerRadius(8)
                 }
                 .buttonStyle(.plain)
@@ -162,7 +175,7 @@ struct ListItem: View {
             HStack {
                 Image(systemName: "plus.circle")
                     .imageScale(.large)
-                    .foregroundStyle(Color.wineRed)
+                    .foregroundStyle(themeColor)
                 
                 Text(itemName)
                     .font(.headline)
@@ -176,11 +189,10 @@ struct ListItem: View {
             }
         }
         .padding(.vertical, 2)
-        .listRowBackground(Color.wineRed.opacity(0.04))
+        .listRowBackground(themeColor.opacity(0.08))
     }
 }
 
-// MARK: - Tip Selector Component
 struct TipItem: View {
     @State private var flag: Bool = false
     @State private var atip: Int = 15
@@ -214,10 +226,10 @@ struct TipItem: View {
     }
 }
 
-// MARK: - Cost Breakdown Component
 struct CostItem: View {
     let subtotal: Int
     let tip: Int
+    var themeColor: Color
     
     private var tipAmount: Double {
         Double(subtotal) * (Double(tip) / 100.0)
@@ -235,13 +247,13 @@ struct CostItem: View {
                 .foregroundStyle(.primary)
             Text("Total: $\(totalAmount, specifier: "%.2f")")
                 .bold()
-                .foregroundStyle(Color.wineRed)
+                .foregroundStyle(themeColor)
         }
     }
 }
 
-// MARK: - Confirmation Button Component
 struct ConfirmItem: View {
+    var themeColor: Color
     @State private var present: Bool = false
     
     var body: some View {
@@ -254,25 +266,25 @@ struct ConfirmItem: View {
                 Spacer()
             }
             .padding(.vertical, 8)
-            .background(Color.wineRed)
+            .background(themeColor)
             .cornerRadius(8)
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $present) {
-            SecondView(present: $present)
+            ConfirmationView(present: $present, themeColor: themeColor)
         }
     }
 }
 
-// MARK: - Order Confirmed Sheet View
-struct SecondView: View {
+struct ConfirmationView: View {
     @Binding var present: Bool
+    var themeColor: Color
     
     var body: some View {
         VStack(spacing: 16) {
             Image(systemName: "checkmark.circle.fill")
                 .font(.system(size: 50))
-                .foregroundStyle(Color.wineRed)
+                .foregroundStyle(themeColor)
             
             Text("Order Confirmed!")
                 .font(.title2)
@@ -283,18 +295,18 @@ struct SecondView: View {
                 present = false
             }
             .buttonStyle(.borderedProminent)
-            .tint(Color.wineRed)
+            .tint(themeColor)
         }
         .padding()
     }
 }
 
-#Preview {
+#Preview("Light Mode") {
     ContentView()
         .preferredColorScheme(.light)
 }
 
-#Preview {
+#Preview("Dark Mode") {
     ContentView()
         .preferredColorScheme(.dark)
 }
